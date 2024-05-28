@@ -1,3 +1,12 @@
 {
-  "redirects": [{ "source": "/", "destination": "/api" }]
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/api/data", "dest": "/api/data.py" },
+    { "src": "/api/getData", "dest": "/api/getData.py" },
+    { "src": "/", "dest": "/api" }
+  ]
 }
+
