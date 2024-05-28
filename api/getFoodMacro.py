@@ -1,12 +1,14 @@
 # api/getFoodMacro.py
 import json
+from urllib import parse
 from http.server import BaseHTTPRequestHandler
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        query_string = self.path.split('?')[-1]
-        params = {k: v for k, v in [x.split('=') for x in query_string.split('&')]}
-        food = params.get('food')
+        # Parse query parameters
+        parsed_path = parse.urlparse(self.path)
+        query_params = parse.parse_qs(parsed_path.query)
+        food = query_params.get('food', [None])[0]
 
         if not food:
             self.send_response(400)
@@ -15,6 +17,7 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({'error': 'Food query parameter is required.'}).encode('utf-8'))
             return
 
+        # Return fixed macronutrient information
         response = {
             'Calories': 130,
             'Fat': '4g',
