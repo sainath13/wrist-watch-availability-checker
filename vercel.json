@@ -7,7 +7,7 @@
     { "src": "/api/data", "dest": "/api/data.py" },
     { "src": "/api/getData", "dest": "/api/getData.py" },
   { "src": "/api/getFoodMacro", "dest": "/api/getFoodMacro.py" },
-{ "src": "/api/getSentiments", "dest": "/api/getSentiments.py" }
+{ "src": "/api/getSentiments", "dest": "/api/getSentiments.py" },
     { "src": "/", "dest": "/api" }
   ]
 }
