@@ -3,14 +3,17 @@ import json
 from http.server import BaseHTTPRequestHandler
 from textblob import TextBlob
 import sqlite3
+import os
 
 
-conn = sqlite3.connect('example.db')
-cursor = conn.cursor()
+# conn = sqlite3.connect('example.db')
+# cursor = conn.cursor()
 
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        current_directory = os.getcwd()
+        print("Current working directory:", current_directory)
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         
@@ -33,14 +36,15 @@ class handler(BaseHTTPRequestHandler):
         
         sentiment = TextBlob(text).sentiment
         
-        cursor.execute('SELECT * FROM users')
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
+        # cursor.execute('SELECT * FROM users')
+        # rows = cursor.fetchall()
+        # for row in rows:
+            # print(row)
 
         response = {
             'polarity': sentiment.polarity,
-            'subjectivity': sentiment.subjectivity
+            'subjectivity': sentiment.subjectivity,
+            'pwd' : current_directory
         }
         
         self.send_response(200)
