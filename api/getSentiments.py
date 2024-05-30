@@ -2,6 +2,12 @@
 import json
 from http.server import BaseHTTPRequestHandler
 from textblob import TextBlob
+import sqlite3
+
+
+conn = sqlite3.connect('example.db')
+cursor = conn.cursor()
+
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -27,6 +33,11 @@ class handler(BaseHTTPRequestHandler):
         
         sentiment = TextBlob(text).sentiment
         
+        cursor.execute('SELECT * FROM users')
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+
         response = {
             'polarity': sentiment.polarity,
             'subjectivity': sentiment.subjectivity
