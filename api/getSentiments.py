@@ -6,8 +6,8 @@ import sqlite3
 import os
 
 
-# conn = sqlite3.connect('example.db')
-# cursor = conn.cursor()
+conn = sqlite3.connect('/var/task/example.db')
+cursor = conn.cursor()
 
 
 class handler(BaseHTTPRequestHandler):
@@ -36,15 +36,16 @@ class handler(BaseHTTPRequestHandler):
         
         sentiment = TextBlob(text).sentiment
         
-        # cursor.execute('SELECT * FROM users')
-        # rows = cursor.fetchall()
-        # for row in rows:
-            # print(row)
+        cursor.execute('SELECT * FROM users')
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
 
         response = {
             'polarity': sentiment.polarity,
             'subjectivity': sentiment.subjectivity,
-            'pwd' : current_directory
+            'pwd' : current_directory,
+            'rows' : rows
         }
         
         self.send_response(200)
