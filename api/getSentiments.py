@@ -2,18 +2,14 @@
 import json
 from http.server import BaseHTTPRequestHandler
 from textblob import TextBlob
-import sqlite3
-import os
-
-
-conn = sqlite3.connect('/var/task/example.db')
-cursor = conn.cursor()
+from supabase import create_client, Client
+url: str = "https://eugmxxtzlcdlrnosbowy.supabase.co"
+key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1Z214eHR6bGNkbHJub3Nib3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcwMDQzOTUsImV4cCI6MjAzMjU4MDM5NX0.TsfuVI_CDiXuiObg6GlToOlp37yGtWTLu3opXv_bB34"
+supabase: Client = create_client(url, key)
 
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        current_directory = os.getcwd()
-        print("Current working directory:", current_directory)
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         
@@ -35,17 +31,12 @@ class handler(BaseHTTPRequestHandler):
             return
         
         sentiment = TextBlob(text).sentiment
-        
-        cursor.execute('SELECT * FROM users')
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
-
+        response = supabase.table("journal").select("*").execute()
+        print(response)
         response = {
             'polarity': sentiment.polarity,
             'subjectivity': sentiment.subjectivity,
-            'pwd' : current_directory,
-            'rows' : rows
+            'rows' : response.data
         }
         
         self.send_response(200)
