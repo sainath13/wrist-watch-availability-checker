@@ -21,7 +21,7 @@ class handler(BaseHTTPRequestHandler):
         Mood = data.get('Mood')
         sentiment = TextBlob(JournalEntry).sentiment
         polarity = sentiment.polarity
-        data, count = supabase.table('countries').insert({"mood": Mood, "mood_rating" : polarity, "journal_text" : JournalEntry }).execute()
+        data, count = supabase.table('JournalEntries').insert({"mood": Mood, "mood_rating" : polarity, "journal_text" : JournalEntry }).execute()
         
         if not JournalEntry or not Mood:
             self.send_response(400)
